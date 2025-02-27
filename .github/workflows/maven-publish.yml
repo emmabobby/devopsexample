@@ -36,8 +36,8 @@ jobs:
     - name: Build and push Docker image tp Docker Hub
       run: |
        docker buildx build  --platform linux/amd64,linux/arm64 \
-        -t ${{ secrets.AWS_ACCOUNT_ID }} .dkr.ecr.${{ secrets.AWS_REGION }} .amazon.com/${{ env.ECR_REPO }}:latest \
-        -t ${{ secrets.AWS_ACCOUNT_ID }} .dkr.ecr.${{ secrets.AWS_REGION }} .amazon.com/${{ env.ECR_REPO }}:GITHUB_SHA \
+        -t ${{ env.DOCKER_HUB_REPO }}:latest \
+        -t ${{ env.DOCKER_HUB_REPO }}:GITHUB_SHA \
         --push
 
        
