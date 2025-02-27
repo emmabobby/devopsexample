@@ -3,6 +3,9 @@
 
 name: Maven Package
 
+env:
+ DOCKER_HUB_REPO: emmaveli101/demo
+ 
 on:
   push:
     branches: ['main']
@@ -27,7 +30,18 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name : Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | dockeer login -u  "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-    - name: build docker image
-      run: docker build -t demo-d .
+    - name: Build and push Docker image tp Docker Hub
+      run: |
+       docker buildx build  --platform linux/amd64,linux/arm64 \
+        -t ${{ secrets.AWS_ACCOUNT_ID }} .dkr.ecr.${{ secrets.AWS_REGION }} .amazon.com/${{ env.ECR_REPO }}:latest \
+        -t ${{ secrets.AWS_ACCOUNT_ID }} .dkr.ecr.${{ secrets.AWS_REGION }} .amazon.com/${{ env.ECR_REPO }}:GITHUB_SHA \
+        --push
 
+       
+         
+        
+      
+  
